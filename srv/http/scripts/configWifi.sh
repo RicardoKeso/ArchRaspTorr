@@ -1,0 +1,54 @@
+#!/bin/sh
+	
+essid=$1
+pass=$2
+interface=$3
+hidden=$4
+
+DadosPorInterface(){
+	clear
+	echo " * * * Preencha as configuracoes da rede * * *"
+	echo ""
+	read -p "ESSID: " essid
+	read -p "PASS: " pass
+	read -p "INTERFACE: " interface
+	read -p "HIDDEN: " hidden
+}
+
+ArquivoDeConfiguracoes(){
+
+	# o tamanho minimo da senha sao 8 caracteres
+
+#	configRede="/etc/netctl/wlan0-$essid"
+	configRede="/mnt/storage/configs/wifi/$interface-$essid"
+
+	echo "Description='Gerado atraves do script (criarRede.sh) - $pass'" > $configRede
+	echo "Interface=$interface" >> $configRede
+	echo "Connection=wireless" >> $configRede
+	echo "Security=wpa" >> $configRede
+	echo "IP=dhcp" >> $configRede
+	echo "ESSID=\"$essid\"" >> $configRede
+	echo "`wpa_passphrase $essid $pass | sed 's/\tpsk/Key/g' | grep Key=`" >> $configRede
+	echo "Hidden=$hidden" >> $configRede
+	echo "#Priority=1" >> $configRede
+
+	chmod +r "${configRede}"
+
+	echo ""
+	echo ""
+	echo " * * * Arquivo gerado: ${configRede} * * *"
+	echo ""
+
+	cat "${configRede}"
+	echo ""
+}
+
+if [ "$#" != "4" ]; then
+	DadosPorInterface
+fi
+
+ArquivoDeConfiguracoes
+
+#echo "Parametros: "$essid" - "$pass" - "$interface" - "$hidden"<br>"
+
+# end #
