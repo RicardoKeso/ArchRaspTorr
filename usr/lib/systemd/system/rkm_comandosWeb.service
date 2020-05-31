@@ -1,0 +1,8 @@
+[Unit]
+Description=Executar comandos dos botoes da interface web
+
+[Service]
+ExecStart=/usr/bin/rkm_comandosWeb
+
+[Install]
+WantedBy=multi-user.target

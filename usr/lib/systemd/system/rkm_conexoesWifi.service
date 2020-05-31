@@ -1,0 +1,8 @@
+[Unit]
+Description=monitorar as redes wifi disponiveis
+
+[Service]
+ExecStart=/usr/bin/rkm_conexoesWifi
+
+[Install]
+WantedBy=multi-user.target

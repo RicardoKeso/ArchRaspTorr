@@ -1,0 +1,107 @@
+#!/bin/python2.7
+
+import threading
+import RPi.GPIO as GPIO
+import time
+import sys
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+
+pinLedRed = 15
+pinLedGreen = 13
+pinLedBlue = 11
+cor = 0
+brilho = 0
+
+GPIO.setup(pinLedRed, GPIO.OUT)
+GPIO.setup(pinLedGreen, GPIO.OUT)
+GPIO.setup(pinLedBlue, GPIO.OUT)
+
+def LimparCores (intensidade):
+    GPIO.output(pinLedRed, 0)
+    GPIO.output(pinLedGreen, 0)
+    GPIO.output(pinLedBlue, 0)
+    time.sleep(intensidade)
+
+def DefinirCores(R, G, B, intensidade): 
+    GPIO.output(pinLedRed, R)
+    GPIO.output(pinLedGreen, G)
+    GPIO.output(pinLedBlue, B)
+    time.sleep(intensidade)
+
+def White ():
+    DefinirCores(1, 0, 0, 0.004)
+    DefinirCores(0, 1, 0, 0.001)
+    DefinirCores(0, 0, 1, 0.001)
+	
+def Yellow ():
+    DefinirCores(1, 0, 0, 0.004)
+    DefinirCores(0, 1, 0, 0.001)
+
+def Magenta ():
+    DefinirCores(1, 0, 0, 0.004)
+    DefinirCores(0, 0, 1, 0.001)
+
+def Cyan ():
+    DefinirCores(0, 1, 0, 0.001)
+    DefinirCores(0, 0, 1, 0.001)
+
+def RGB (R, G, B):
+    DefinirCores(R, G, B, 0.001)
+
+
+def Cor():
+    while(1):
+        global cor
+        global brilho
+        texto = open("/var/rkm/ledRGB/color","r")
+        cor = int(texto.read())
+        texto.close
+        
+        texto = open("/var/rkm/ledRGB/brilho","r")
+        _brilho = texto.read()
+        texto.close
+
+        if(_brilho == "alto\n"):
+            brilho = 0
+        else:
+            brilho = 0.01
+        
+        time.sleep(1)
+
+def Cores (_cor):
+	if (_cor == 111):
+		White()
+	elif (_cor == 100):
+		RGB (1, 0, 0)
+	elif (_cor == 10):
+		RGB (0, 1, 0)
+	elif (_cor == 1):
+		RGB (0, 0, 1)
+	elif (_cor == 110):
+		Yellow()
+	elif (_cor == 101):
+		Magenta()
+	elif (_cor == 11):
+		Cyan()
+	else:
+#                print("off")
+		LimparCores (0)
+#                time.sleep(1)
+
+def Principal(_cor):
+    while(cor == _cor):
+        Cores(cor)
+        time.sleep(0.001)
+        LimparCores(brilho)
+
+    LimparCores(0)
+    Principal(cor)
+
+t = threading.Thread(target=Cor,)
+t.start()
+
+Principal(cor)
+
+

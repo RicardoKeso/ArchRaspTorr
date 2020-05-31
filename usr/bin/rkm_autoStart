@@ -1,0 +1,39 @@
+#!/bin/sh
+
+dirDef=/var/rkm
+dirLed=$dirDef/ledRGB
+
+if [ ! -d "$dirLed" ];then
+	mkdir -p "$dirLed";
+	systemctl enable netctl-auto@wlan0.service
+	echo -n "" >  $dirDef/logInternet
+fi
+
+echo "1" > $dirDef/cooler
+echo "1" > $dirLed/color
+echo "baixo" > $dirLed/brilho
+echo "" > $dirDef/headerEmail
+echo "0" > $dirDef/comandosWeb
+echo "0.0.0.0" > $dirDef/ipPublico
+echo "1" > $dirDef/internetOn
+
+chmod 755 $dirDef
+chmod 766 -R $dirDef/*
+chmod 755 $dirLed
+
+echo "0" > /sys/class/leds/led1/brightness
+
+mount /dev/sda1 /mnt/storage
+
+systemctl start httpd.service
+systemctl start rkm_comandosWeb.service
+systemctl start rkm_transmission.service
+systemctl start rkm_cooler.service
+systemctl start rkm_ledRGB.service
+systemctl start rkm_ap.service
+systemctl start rkm_internet.service
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -A FORWARD -i wlan_1 -o wlan0 -j ACCEPT
+iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
+iptables -A FORWARD -i wlan0 -o wlan_1 -m state --state RELATED,ESTABLISHED -j ACCEPT

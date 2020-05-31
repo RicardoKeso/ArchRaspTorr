@@ -1,0 +1,29 @@
+#!/bin/bash
+
+header=/var/rkm/headerEmail
+
+makeHeader(){
+	wlan0=`ip a | grep "scope global wlan0" | cut -d/ -f1 | awk '{print $2}'`
+	echo "From: \"`hostname`.ricardokeso.com\" <notificacao@ricardokeso.com>" > $header
+	echo "To: $1" >> $header
+	echo "Subject: On-line ($2 - $wlan0)" >> $header
+}
+
+if [ "$#" == "2" ]; then
+	makeHeader $1 $2
+	mutt -H $header < /dev/null
+elif [ "$#" == "3" ]; then
+	makeHeader $1 $2
+	mutt -H $header -a $3 < /dev/null
+elif [ "$#" == "0" ]; then
+	makeHeader "ricardokeso@ricardokeso.com" "teste"
+	mutt -H $header < /dev/null
+else
+	echo ""
+	echo "Erro no parametros. Apenas email+titulo ou email+titulo+anexo"
+	echo "ex.: $0 \"abc@abc.com\" \"titulo\""
+	echo "ex.: $0 \"abc@abc.com\" \"titulo\" \"caminhoDoAnexo\""
+	echo ""
+fi
+
+echo "" > $header

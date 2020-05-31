@@ -1,0 +1,8 @@
+[Unit]
+Description=Verificar a conexao com a internet
+
+[Service]
+ExecStart=/usr/bin/rkm_internet
+
+[Install]
+WantedBy=multi-user.target

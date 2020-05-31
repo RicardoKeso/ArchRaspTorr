@@ -1,0 +1,8 @@
+[Unit]
+Description=Tocar musica estipulada na saida analogica
+
+[Service]
+ExecStart=/usr/bin/rkm_playMusic
+
+[Install]
+WantedBy=multi-user.target

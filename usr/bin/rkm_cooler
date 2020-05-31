@@ -1,0 +1,22 @@
+#!/usr/bin/python2.7
+# -*- utf-8 -*-
+
+import sys
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+
+pinCooler = 7
+#flag = int(sys.argv[1])
+GPIO.setup(pinCooler, GPIO.OUT)
+
+while(1):
+    retorno = open("/var/rkm/cooler", "r")
+    flag = int(retorno.read())
+    retorno.close()
+    GPIO.output(pinCooler, flag)
+    time.sleep(1)
+
+# o sinal do pino nao pode ser limpo com GPIO.cleanup(), para nao desligar o cooler

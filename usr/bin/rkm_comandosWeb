@@ -1,0 +1,35 @@
+#!/bin/bash
+
+caminho="/var/rkm/comandosWeb"
+echo 0 > $caminho
+
+while [ 1 ]; do
+
+	com=`cat $caminho`
+	
+	if [ "$com" == "1" ]; then
+		echo 0 > $caminho
+		shutdown -h now
+#		echo "desligar"
+	elif [ "$com" == "2" ]; then
+		echo 0 > $caminho
+		shutdown -r now
+#		echo "reiniciar"
+	elif [ "$com" == "3" ]; then
+		echo 0 > $caminho
+		mv /mnt/storage/bkp/* /mnt/storage/bkp_old/
+		rkm_backup "/mnt/storage/bkp/"
+#		echo "backup"
+	elif [ "$com" == "4" ]; then
+		echo 0 > $caminho
+		rkm_email "ricardokeso@ricardokeso.com" "`cat /var/rkm/ipPublico`"
+#		echo "email"
+	elif [ "$com" == "-4" ]; then
+		echo 0 > $caminho
+		rkm_email
+#		echo "teste email"
+
+	fi
+
+	sleep 3
+done

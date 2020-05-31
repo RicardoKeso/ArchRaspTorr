@@ -1,0 +1,3 @@
+#!/bin/bash
+
+mpg123 -qm /mnt/storage/Audio/Eminem\ -\ Not\ Afraid.mp3

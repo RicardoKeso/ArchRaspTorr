@@ -1,0 +1,12 @@
+#!/bin/bash
+
+nmap -sP $1|\
+ grep "report\|MAC" |\
+ tr "\n" "@" |\
+ sed 's/@M/ M/g' |\
+ tr "@" "\n"|\
+ sed 's/Nmap scan report for \|MAC Address: //g' |\
+ tr "\n" "@" |\
+ sed 's/@/<br>@/g' |\
+ tr "@" "\n"
+

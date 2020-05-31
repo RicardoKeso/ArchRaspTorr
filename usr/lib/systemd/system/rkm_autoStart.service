@@ -1,0 +1,8 @@
+[Unit]
+Description="Script de AutoStart"
+
+[Service]
+ExecStart=/bin/rkm_autoStart
+
+[Install]
+WantedBy=multi-user.target

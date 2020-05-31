@@ -1,0 +1,13 @@
+#!/bin/bash
+
+tar -zcf $1bkpRPi_`hostname`_`date +%Y%m%d-%Hh%Mm%Ss`.tar.gz \
+ /etc/netctl/wlan* \
+ /usr/bin/rkm_* \
+ /usr/lib/systemd/system/rkm_* \
+ /etc/ssmtp/ssmtp.conf \
+ /etc/dhcpd.conf \
+ /etc/hostapd/hostapd.conf \
+ /etc/udev/rules.d/10-network.rules \
+ /srv/http/* \
+ /root/.config
+ 

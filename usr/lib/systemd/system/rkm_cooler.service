@@ -1,0 +1,8 @@
+[Unit]
+Description=Ligar e desligar cooler atraves da escrita 0 ou 1 no arquivo /var/rkm/cooler
+
+[Service]
+ExecStart=/usr/bin/rkm_cooler
+
+[Install]
+WantedBy=multi-user.target

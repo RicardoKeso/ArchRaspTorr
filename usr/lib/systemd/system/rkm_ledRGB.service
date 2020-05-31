@@ -1,0 +1,8 @@
+[Unit]
+Description=Controla a cor do led atraves dos binarios de 0 a 7 /var/rkm/ledRGB/color
+
+[Service]
+ExecStart=/usr/bin/rkm_ledRGB
+
+[Install]
+WantedBy=multi-user.target

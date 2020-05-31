@@ -1,0 +1,29 @@
+#!/bin/bash
+
+caminho=/var/rkm
+
+while [ 1 ]; do
+
+	ping=`ping 8.8.4.4 -c 1 | grep "ttl"`
+
+	if [ "$ping" == "" ]; then
+		
+		internetOn=`cat $caminho/internetOn`
+		if [ "$internetOn" != "0" ]; then
+			echo 0 > $caminho/internetOn
+			echo -n "(off) `date` > > > " >> $caminho/logInternet
+		fi
+
+	else
+		ipPublico=`curl -s http://checkip.amazonaws.com`
+		echo $ipPublico > $caminho/ipPublico
+
+		internetOn=`cat $caminho/internetOn`
+		if [ "$internetOn" != "1" ]; then
+			echo 4 > $caminho/comandosWeb
+			echo 1 > $caminho/internetOn
+			echo "(on) `date`" >> $caminho/logInternet
+		fi
+	fi
+	sleep 20
+done
